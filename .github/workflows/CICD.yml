@@ -1,28 +1,40 @@
 name: CICD for GO
 
 on:
-    push:
-        branches: [main]
-        
+  push:
+    branches: [main]
+
 jobs:
-    build:
-        runs-on: ubuntu-16.04
-        steps:
-            - name: Checkout my codes
-              uses: actions/checkout@v2
-            - name: setup Go Environment
-              uses: actions/setup-go@v2
-              with:
-                    go-version: '1.15'
-            - name: Version Check Go
-              run:
-                go version
-            - name: Install dependencies
-              run: |
-                go get github.com/tebeka/go2xunit
-                go get github.com/franela/goblin
-                go test -v
-                
-      
+  build: 
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Checkout my codes
+        uses: actions/checkout@v2
+      - name: Setup Go Environment
+        uses: actions/setup-go@v2
+        with:
+            go-version: '1.15'
+      - name: Check Go Version
+        run: |
+          go version
+        
+      - name: Install dependencies
+        run: |
+          go get github.com/tebeka/go2xunit
+      - if: ${{success()}}
+        name: Install Goblin
+        run: |
+          go get github.com/franela/goblin
+      - if: ${{success()}}
+        name: Test Goblin
+        run: |
+          go test -v | go2xunit >report.xml
+      - if: ${{success()}}
+        name: Display test information
+        uses: EnricoMi/publish-unit-test-result-action@v1.5
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          files: report.xml
+          
               
         
