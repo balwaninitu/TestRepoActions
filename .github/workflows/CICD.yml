@@ -7,7 +7,6 @@ on:
   pull_request:
     branches: [main]
 
-
 jobs:
   build: 
     runs-on: ubuntu-16.04
@@ -21,6 +20,7 @@ jobs:
       - name: Check Go Version
         run: |
           go version
+          ls
         
       - name: Install dependencies
         run: |
@@ -34,6 +34,7 @@ jobs:
         run: |
           go test -v
           go test -v | go2xunit >report.xml
+          ls
       - if: ${{failure()}}
         name: Create Issues
         uses: nashmaniac/create-issue-action@v1.1
@@ -51,7 +52,12 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
           files: report.xml
           
+      - name: List out my directory
+        run: |
+          ls
+          
         
+          
           
         
               
