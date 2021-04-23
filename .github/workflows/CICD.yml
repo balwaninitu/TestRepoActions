@@ -1,12 +1,12 @@
 name: CICD for GO
 
-On:
+on:
     push:
-      branches: [main]
-      
+        branches: [main]
+        
 jobs:
     build:
-      runs-on: ubuntu-16.04
-      steps:
-        - name: checkout my codes
-          uses: actions/checkout@v2
+        runs-on: ubuntu-16.04
+        steps:
+            name: checkout my codes
+            uses: actions/checkout@v2
